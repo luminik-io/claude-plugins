@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/marketplace.schema.json",
+  "name": "luminik-plugins",
+  "owner": {
+    "name": "Luminik",
+    "email": "prasad@luminik.io",
+    "url": "https://www.luminik.io"
+  },
+  "metadata": {
+    "description": "Open Claude Code plugins from Luminik — practical agents and skills for solo founders, GTM operators, and B2B event marketers.",
+    "version": "0.1.0",
+    "homepage": "https://www.luminik.io",
+    "repository": "https://github.com/luminik-io/claude-plugins",
+    "license": "MIT"
+  },
+  "plugins": [
+    {
+      "name": "event-outbound",
+      "source": {
+        "github": "luminik-io/event-outbound-skill"
+      },
+      "description": "Generate cold-outbound sequences for B2B event marketers. Takes an event URL + your company URL + a target attendee profile and produces multi-touch email + LinkedIn sequences across a parameterised lead time (1–8 weeks). Grounded in publicly-taught cold-outbound frameworks and published benchmark research — every generated touch is validated against hard rules (subject ≤4 words, body 50–100 words, zero pitch-speak, pronoun ratio favouring the reader).",
+      "version": "0.1.0",
+      "category": "marketing",
+      "keywords": [
+        "cold-email",
+        "cold-outbound",
+        "event-marketing",
+        "sequence-generator",
+        "b2b",
+        "demand-generation",
+        "cold-outbound",
+        "gong"
+      ],
+      "license": "MIT",
+      "author": "Luminik"
+    }
+  ]
+}
