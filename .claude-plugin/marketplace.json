@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/marketplace.schema.json",
   "name": "luminik-plugins",
   "owner": {
     "name": "Luminik",
@@ -16,24 +15,18 @@
   "plugins": [
     {
       "name": "event-outbound",
-      "source": {
-        "github": "luminik-io/event-outbound-skill"
-      },
-      "description": "Generate cold-outbound sequences for B2B event marketers. Takes an event URL + your company URL + a target attendee profile and produces multi-touch email + LinkedIn sequences across a parameterised lead time (1–8 weeks). Grounded in publicly-taught cold-outbound frameworks and published benchmark research — every generated touch is validated against hard rules (subject ≤4 words, body 50–100 words, zero pitch-speak, pronoun ratio favouring the reader).",
+      "description": "Generate multi-channel cold-outbound sequences for B2B event attendees. Takes an event URL + your company URL + a target attendee persona and produces email + LinkedIn sequences across a parameterised lead time (1-8 weeks). Grounded in publicly-taught cold-outbound frameworks and published benchmark research. Every generated touch is validated: subject under 4 words, body 50-100 words, no pitch-speak, CTA pattern favouring concrete offers over meeting-asks.",
       "version": "0.1.0",
+      "author": {
+        "name": "Luminik",
+        "email": "prasad@luminik.io",
+        "url": "https://www.luminik.io"
+      },
+      "source": "./plugins/event-outbound",
       "category": "marketing",
-      "keywords": [
-        "cold-email",
-        "cold-outbound",
-        "event-marketing",
-        "sequence-generator",
-        "b2b",
-        "demand-generation",
-        "cold-outbound",
-        "gong"
-      ],
-      "license": "MIT",
-      "author": "Luminik"
+      "tags": ["b2b", "outbound", "cold-email", "events", "conferences", "sales-enablement", "field-marketing"],
+      "keywords": ["claude-code", "plugin", "cold-outbound", "gong", "sequence-generator", "demand-generation"],
+      "license": "MIT"
     }
   ]
 }
