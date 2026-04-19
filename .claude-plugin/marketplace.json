@@ -6,7 +6,7 @@
     "url": "https://www.luminik.io"
   },
   "metadata": {
-    "description": "Open Claude Code plugins from Luminik — practical agents and skills for solo founders, GTM operators, and B2B event marketers.",
+    "description": "Open Claude Code plugins from Luminik — practical agents and skills for AEs, SDRs, and event marketers running pre-event outbound and dinner/side-event invites at B2B trade shows and conferences. Founders doing their own event outbound, welcome too.",
     "version": "0.1.0",
     "homepage": "https://www.luminik.io",
     "repository": "https://github.com/luminik-io/claude-plugins",
@@ -15,7 +15,7 @@
   "plugins": [
     {
       "name": "event-outbound",
-      "description": "Generate multi-channel cold-outbound sequences for B2B event attendees. Takes an event URL + your company URL + a target attendee persona and produces email + LinkedIn sequences across a parameterised lead time (1-8 weeks). Grounded in publicly-taught cold-outbound frameworks and published benchmark research. Every generated touch is validated: subject under 4 words, body 50-100 words, no pitch-speak, CTA pattern favouring concrete offers over meeting-asks.",
+      "description": "Generate multi-channel outbound sequences for AEs, SDRs, and event marketers working B2B trade shows, conferences, and industry events. Takes an event URL + your company URL + a target persona and produces email + LinkedIn sequences across a parameterised lead time (1-8 weeks). Built on 20k+ personalised touches across 50+ events that sourced $6M+ in pipeline across fintech (identity verification), cybersecurity, and B2B SaaS. Every generated touch is validated: subject under 4 words, body 50-100 words, banned-words blocklist, pronoun ratio favouring the reader, CTA pattern favouring concrete offers over meeting-asks.",
       "version": "0.1.0",
       "author": {
         "name": "Luminik",
@@ -24,8 +24,8 @@
       },
       "source": "./plugins/event-outbound",
       "category": "marketing",
-      "tags": ["b2b", "outbound", "cold-email", "events", "conferences", "sales-enablement", "field-marketing"],
-      "keywords": ["claude-code", "plugin", "cold-outbound", "gong", "sequence-generator", "demand-generation"],
+      "tags": ["sdr", "ae", "event-marketing", "cold-email", "cold-outbound", "linkedin", "trade-shows", "conferences", "sales-enablement", "field-marketing"],
+      "keywords": ["claude-code", "plugin", "sequence-generator", "demand-generation", "b2b-events"],
       "license": "MIT"
     }
   ]
