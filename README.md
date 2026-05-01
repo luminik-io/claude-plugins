@@ -1,19 +1,39 @@
+<div align="center">
+
+<a href="https://www.luminik.io"><img src="https://www.luminik.io/luminik-logo.svg" alt="Luminik" height="56" /></a>
+
 # Luminik Plugins
 
-Open Claude Code plugins from [Luminik](https://www.luminik.io). Practical agents and skills for AEs, SDRs, and event marketers running pre-event outbound and dinner/side-event invites at B2B trade shows and conferences. Founders doing their own event outbound, welcome too.
+Open Claude Code plugins from [Luminik](https://www.luminik.io). <br/>
+Practical agents and skills for AEs, SDRs, and event marketers running B2B trade shows and conferences.
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-f63e8c.svg)](LICENSE)
+[![Claude Code marketplace](https://img.shields.io/badge/Claude%20Code-marketplace-1e1e1e.svg)](https://docs.claude.com/en/docs/claude-code/plugins)
+[![Plugins: 1](https://img.shields.io/badge/plugins-1-2ea043.svg)](#available-plugins)
+
+[**Install**](#install-the-marketplace) · [**Plugins**](#available-plugins) · [**Contributing**](#contributing)
+
+</div>
+
+---
 
 ## Install the marketplace
 
+From any Claude Code session:
+
 ```bash
-# From any Claude Code session
 /plugin marketplace add luminik-io/claude-plugins
 ```
+
+That registers this catalogue. From there, install a specific plugin with `/plugin install <name>@luminik-plugins`.
 
 ## Available plugins
 
 ### event-outbound
 
-Generate multi-channel pre-event outbound sequences for AEs, SDRs, and event marketers working B2B trade shows, conferences, and industry events. Takes an event (RSA, Money20/20, Singapore Fintech Festival), the company you are targeting with attendee personas, and your sender identity. Returns one outreach sequence per persona, distributed across a 4-week lead-time window (configurable 1–8) with email and LinkedIn touches at sensible intervals.
+> Pre-event outbound sequences for B2B trade shows, conferences, and industry events.
+
+Generate validated multi-channel pre-event outbound sequences for AEs, SDRs, and event marketers working B2B trade shows, conferences, and industry events. Takes an event (RSA, Money20/20, Singapore Fintech Festival), the company you are targeting with attendee personas, and your sender identity. Returns one outreach sequence per persona, distributed across a 4-week lead-time window (configurable 1–8) with email and LinkedIn touches at sensible intervals.
 
 Built on 20k+ personalised touches across 50+ events that sourced $6M+ in pipeline across fintech (identity verification), cybersecurity, and B2B SaaS.
 
@@ -32,8 +52,12 @@ Failures retry up to 3× with temperature jitter; touches that exhaust retries s
 
 Two fully-rendered worked examples ship in the repo (RSA Conference 2026 cybersecurity, Money20/20 Europe 2026 fintech) plus an input-fixture set for Singapore Fintech Festival 2026.
 
-**Repo:** https://github.com/luminik-io/event-outbound-skill
-**Site:** https://www.luminik.io/tools/event-outbound/
+| | |
+|---|---|
+| **Repo** | [github.com/luminik-io/event-outbound-skill](https://github.com/luminik-io/event-outbound-skill) |
+| **Site** | [luminik.io/tools/event-outbound](https://www.luminik.io/tools/event-outbound/) |
+| **Version** | 0.2.0 |
+| **License** | MIT |
 
 **Install:**
 
@@ -44,12 +68,18 @@ Two fully-rendered worked examples ship in the repo (RSA Conference 2026 cyberse
 
 ## Contributing
 
-This marketplace is open. If you build a Claude Code plugin that's useful for the same audience (AEs, SDRs, event marketers, founders running their own event outbound) and want it distributed here, open a PR adding an entry to `.claude-plugin/marketplace.json`.
+This marketplace is open. If you build a Claude Code plugin that's useful for the same audience (AEs, SDRs, event marketers, founders running their own event outbound) and want it distributed here, open a PR adding an entry to [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Plugins live as git submodules under `plugins/` so each one stays independently versioned in its own repo.
 
-## Licence
+## License
 
-MIT across this registry and each plugin unless stated otherwise.
+MIT across this registry. Each plugin is MIT unless its own LICENSE states otherwise.
 
 ---
 
-Luminik is a product of DataRavel Inc. (Newark, DE). More at [luminik.io](https://www.luminik.io).
+<div align="center">
+
+**[More from Luminik →](https://www.luminik.io)**
+
+Luminik is a product of [DataRavel Inc.](https://www.luminik.io) (Newark, DE).
+
+</div>
