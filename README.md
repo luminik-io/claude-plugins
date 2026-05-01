@@ -13,21 +13,32 @@ Open Claude Code plugins from [Luminik](https://www.luminik.io). Practical agent
 
 ### event-outbound
 
-Generate multi-channel outbound sequences for AEs, SDRs, and event marketers working B2B trade shows, conferences, and industry events. Takes an event URL + your company URL + a target attendee profile and produces multi-touch email + LinkedIn sequences across a parameterised lead time (1–8 weeks).
+Generate multi-channel pre-event outbound sequences for AEs, SDRs, and event marketers working B2B trade shows, conferences, and industry events. Takes an event (RSA, Money20/20, Singapore Fintech Festival), the company you are targeting with attendee personas, and your sender identity. Returns one outreach sequence per persona, distributed across a 4-week lead-time window (configurable 1–8) with email and LinkedIn touches at sensible intervals.
 
-Built on 20k+ personalised touches across 50+ events that sourced $6M+ in pipeline across fintech (identity verification), cybersecurity, and B2B SaaS. Every generated touch is validated against hard rules before it's emitted:
+Built on 20k+ personalised touches across 50+ events that sourced $6M+ in pipeline across fintech (identity verification), cybersecurity, and B2B SaaS.
 
-- Subject lines ≤ 4 words, all-lowercase, priority-based (no buzzwords, no social-proof stuffing)
-- Body 50–100 words, 3–4 sentences, structure *Personalization → Problem → Solution → CTA*
-- Zero pitch-speak (a banned-words blocklist with retry-3 and a `quality_flag` fallback)
+**Every touch is validated before it lands:**
+
+- Subject lines ≤ 4 words, all-lowercase, no digits, no buzzwords (53-phrase blocklist)
+- Body channel-aware: 50–100 words / 3–5 sentences for cold email, 18–35 words for LinkedIn connection requests, separate bands for LinkedIn DMs, post-connect, post-event, meeting requests
 - Pronoun ratio favouring the reader ("you/your" > "we/our")
-- CTA pattern favouring concrete offers over meeting-asks
+- Illumination question on first-touch + post-connect (the "how / what / why are / do / is you / your" shape)
+- Lean-back, permission-based CTAs ("worth a look?", "open to comparing notes?") over meeting-asks
+- No leading questions, exclamation marks, emoji, or em-dashes
+- 195-phrase, 10-category LLM-cliche blocklist: performative empathy, generic compliments, sales-speak openers, manufactured intimacy, marketing buzzwords, cold-email-overused, lazy-generalization openers, LLM transition tics, GPT vocabulary, hedge softeners. Sources cited inline (Stanford CRFM, GPTZero, Lavender Live transcript, Gong / 30MPC / Outbound Squad 85M-email "Ultimate Cold Email Data Report")
+- Specificity check: every touch must reference a concrete event detail, persona priority, or pain point
+
+Failures retry up to 3× with temperature jitter; touches that exhaust retries ship with `quality_flag: 'rules_violated'` for human review. Output is a markdown sequence with per-touch quality score (0–5, banded `top-tier` / `ship` / `review` / `rewrite`) plus a sequence summary (average quality, score-band counts, CTA mix, illumination-question coverage).
+
+Two fully-rendered worked examples ship in the repo (RSA Conference 2026 cybersecurity, Money20/20 Europe 2026 fintech) plus an input-fixture set for Singapore Fintech Festival 2026.
 
 **Repo:** https://github.com/luminik-io/event-outbound-skill
+**Site:** https://www.luminik.io/tools/event-outbound/
 
 **Install:**
 
 ```bash
+/plugin marketplace add luminik-io/claude-plugins
 /plugin install event-outbound@luminik-plugins
 ```
 
