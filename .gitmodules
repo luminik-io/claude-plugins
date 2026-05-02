@@ -1,0 +1,3 @@
+[submodule "plugins/event-outbound"]
+	path = plugins/event-outbound
+	url = https://github.com/luminik-io/event-outbound-skill.git
