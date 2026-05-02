@@ -43,7 +43,7 @@ Built on 20k+ personalised touches across 50+ events that sourced $6M+ in pipeli
 - Body channel-aware: 50–100 words / 3–5 sentences for cold email, 18–35 words for LinkedIn connection requests, separate bands for LinkedIn DMs, post-connect, post-event, meeting requests
 - Pronoun ratio favouring the reader ("you/your" > "we/our")
 - Illumination question on first-touch + post-connect (the "how / what / why are / do / is you / your" shape)
-- Lean-back, permission-based CTAs ("worth a look?", "open to comparing notes?") over meeting-asks
+- Lean-back, permission-based CTAs ("worth a look?", "open to learning more?") over meeting-asks
 - No leading questions, exclamation marks, emoji, or em-dashes
 - 195-phrase, 10-category LLM-cliche blocklist: performative empathy, generic compliments, sales-speak openers, manufactured intimacy, marketing buzzwords, cold-email-overused, lazy-generalization openers, LLM transition tics, GPT vocabulary, hedge softeners. Sources cited inline (Stanford CRFM, GPTZero, Lavender Live transcript, Gong / 30MPC / Outbound Squad 85M-email "Ultimate Cold Email Data Report")
 - Specificity check: every touch must reference a concrete event detail, persona priority, or pain point
@@ -56,7 +56,7 @@ Two fully-rendered worked examples ship in the repo (RSA Conference 2026 cyberse
 |---|---|
 | **Repo** | [github.com/luminik-io/event-outbound-skill](https://github.com/luminik-io/event-outbound-skill) |
 | **Site** | [luminik.io/tools/event-outbound](https://www.luminik.io/tools/event-outbound/) |
-| **Version** | 0.2.0 |
+| **Version** | 0.2.3 |
 | **License** | MIT |
 
 **Install:**
