@@ -6,8 +6,8 @@
     "url": "https://www.luminik.io"
   },
   "metadata": {
-    "description": "Open Claude Code plugins from Luminik. Practical agents and skills for AEs, SDRs, and event marketers running pre-event outbound and dinner/side-event invites at B2B trade shows and conferences. Founders doing their own event outbound, welcome too.",
-    "version": "0.2.3",
+    "description": "Open Claude plugins from Luminik. Practical skills for AEs, SDRs, and event marketers running outbound and side-event invites around B2B trade shows and conferences.",
+    "version": "0.2.4",
     "homepage": "https://www.luminik.io",
     "repository": "https://github.com/luminik-io/claude-plugins",
     "license": "MIT"
@@ -15,8 +15,8 @@
   "plugins": [
     {
       "name": "event-outbound",
-      "description": "Generate validated email and LinkedIn sequences for B2B events. Event, ICP, persona, and sender context in; buyer-first touches out across pre-event, day-of, and post-event motions. Built from 20K+ outbound touches reviewed across 50+ fintech, cybersecurity, and B2B SaaS events that sourced $6M+ in pipeline. Runs inside Claude Code with no extra API key. The bundled validator checks subject length, inbox-preview opener, channel length, illumination question, pronoun ratio, direct CTA, permission-to-send gating, forced event phrasing, and a 10-category cliche blocklist. Includes fully rendered Black Hat USA 2026 and Money20/20 Europe 2026 worked examples plus Singapore Fintech Festival 2026 input fixtures.",
-      "version": "0.2.3",
+      "description": "Create buyer-first email and LinkedIn outreach for B2B events. Give it event context, ICP, target personas, and sender context. It drafts validated pre-event, day-of, and post-event touches. Built from 20K+ outbound touches reviewed across 50+ fintech, cybersecurity, and B2B SaaS events that sourced $6M+ in pipeline. Runs inside Claude Code and Claude Cowork with no extra API key. The bundled local validator checks subject length, inbox-preview opener, channel length, illumination question, pronoun ratio, direct CTA, permission-to-send gating, forced event phrasing, and a 10-category cliche blocklist. Includes fully rendered Black Hat USA 2026 and Money20/20 Europe 2026 worked examples plus Singapore Fintech Festival 2026 input fixtures.",
+      "version": "0.2.4",
       "author": {
         "name": "Luminik",
         "email": "prasad@luminik.io",
@@ -25,7 +25,7 @@
       "source": "./plugins/event-outbound",
       "category": "marketing",
       "tags": ["sdr", "ae", "event-marketing", "cold-email", "cold-outbound", "linkedin", "trade-shows", "conferences", "sales-enablement", "field-marketing"],
-      "keywords": ["claude-code", "plugin", "sequence-generator", "demand-generation", "b2b-events"],
+      "keywords": ["claude-code", "claude-cowork", "plugin", "sequence-generator", "demand-generation", "b2b-events"],
       "license": "MIT"
     }
   ]
