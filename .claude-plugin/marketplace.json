@@ -7,7 +7,7 @@
   },
   "metadata": {
     "description": "Open Claude plugins from Luminik. Practical skills for AEs, SDRs, and event marketers running outbound and side-event invites around B2B trade shows and conferences.",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "homepage": "https://www.luminik.io",
     "repository": "https://github.com/luminik-io/claude-plugins",
     "license": "MIT"
@@ -15,8 +15,8 @@
   "plugins": [
     {
       "name": "event-outbound",
-      "description": "Create buyer-first email and LinkedIn outreach for B2B events. Give it event context, ICP, target personas, and sender context. It drafts validated pre-event, day-of, and post-event touches. Built from 20K+ outbound touches reviewed across 50+ fintech, cybersecurity, and B2B SaaS events that sourced $6M+ in pipeline. Runs inside Claude Code and Claude Cowork with no extra API key. The bundled local validator checks subject length, inbox-preview opener, channel length, illumination question, pronoun ratio, direct CTA, permission-to-send gating, forced event phrasing, and a 10-category cliche blocklist. Includes fully rendered Black Hat USA 2026 and Money20/20 Europe 2026 worked examples plus Singapore Fintech Festival 2026 input fixtures.",
-      "version": "0.2.4",
+      "description": "Create buyer-first email and LinkedIn outreach for B2B events. Give it event context, ICP, target personas, sender context, real proof points, available assets, event logistics, and cadence preferences. It drafts validated pre-event, day-of, and post-event touches. Built from 20K+ outbound touches reviewed across 50+ fintech, cybersecurity, and B2B SaaS events that sourced $6M+ in pipeline. Runs inside Claude Code and Claude Cowork with no extra API key. The bundled local validator checks subject length, inbox-preview opener, channel length, illumination question, pronoun ratio, clear CTA questions, permission-to-send gating, event asks only when logistics are real, 4-day cadence feasibility, distinct pain angles, no sequence-mechanics openers, unsourced asset promises, unsourced proof claims, Apollo merge fields, and a 10-category cliche blocklist. Includes fully rendered Black Hat USA 2026 and Money20/20 Europe 2026 worked examples, Singapore Fintech Festival 2026 input fixtures, and Claude showcase guardrail runs.",
+      "version": "0.2.5",
       "author": {
         "name": "Luminik",
         "email": "prasad@luminik.io",
