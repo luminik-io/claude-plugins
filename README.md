@@ -43,18 +43,25 @@ Create validated email and LinkedIn outreach for B2B events. Give it event conte
 
 Built on 20K+ personalized touches across 50+ events that sourced $6M+ in pipeline across fintech (identity verification), cybersecurity, and B2B SaaS.
 
+The current skill asks for buyer job, current workaround, hidden risk, customer-language pain, proof points, available assets, event dates, sender event logistics, requested touch count, and minimum gap before drafting. If those are missing, it either asks targeted follow-ups or writes in strict no-invention mode.
+
 **Every touch is validated before it lands:**
 
-- Subject lines ≤ 4 words, all-lowercase, no digits, no buzzwords (53-phrase blocklist)
+- Subject lines ≤ 4 words, all-lowercase, no digits, no buzzwords
 - Body channel-aware: 50–100 words / 3–5 sentences for cold email, 18–35 words for LinkedIn connection requests, separate bands for LinkedIn DMs, post-connect, post-event, meeting requests
 - Pronoun ratio favouring the reader ("you/your" > "we/our")
 - Illumination question on first-touch + post-connect (the "how / what / why are / do / is you / your" shape)
-- Direct, specific CTAs with no permission-to-send gating
+- Direct, specific CTA questions with no permission-to-send gating, no comma-spliced asset CTAs, and explicit connection asks for LinkedIn connection requests
+- Event-specific coffee or conversation asks only when sender attendance, booth, side-event, or availability is known
+- User-configurable touch count with 4-day minimum gap by default and date-aware cadence planning so touches do not land in the past
+- Distinct pain angles across every email and LinkedIn step, with sequence-level rejection for repeated pain labels or high-overlap pain vocabulary
+- Strict truth mode: asset promises require supplied `availableAssets`, proof claims require supplied `proofPoints`, and Apollo merge fields are enforced
+- No sequence-mechanics openers such as "separate thread", "earlier note", or "following up on my..."
 - No leading questions, exclamation marks, emoji, or em-dashes
 - 195-phrase, 10-category LLM-cliche blocklist: performative empathy, generic compliments, sales-speak openers, manufactured intimacy, marketing buzzwords, cold-email-overused, lazy-generalization openers, LLM transition tics, GPT vocabulary, hedge softeners. Sources cited inline (Stanford CRFM, GPTZero, Lavender Live transcript, Gong / 30MPC / Outbound Squad 85M-email "Ultimate Cold Email Data Report")
 - Specificity check: every touch must reference a concrete event detail, persona priority, or pain point
 
-Failures retry up to 3× with temperature jitter; touches that exhaust retries ship with `quality_flag: 'rules_violated'` for human review. Output is a markdown sequence with per-touch quality score (0–5, banded `top-tier` / `ship` / `review` / `rewrite`) plus a sequence summary (average quality, score-band counts, CTA mix, illumination-question coverage).
+Failures retry up to 3× with temperature jitter; touches that exhaust retries ship with `quality_flag: 'rules_violated'` for human review. Output is a markdown sequence with per-touch quality score (0–5, banded `top-tier` / `ship` / `review` / `rewrite`) plus a sequence summary (average quality, score-band counts, CTA mix, illumination-question coverage, cadence feasibility, and distinct pain-angle coverage).
 
 Two fully-rendered worked examples ship in the repo (Black Hat USA 2026 cybersecurity, Money20/20 Europe 2026 fintech) plus an input-fixture set for Singapore Fintech Festival 2026.
 
@@ -62,7 +69,7 @@ Two fully-rendered worked examples ship in the repo (Black Hat USA 2026 cybersec
 |---|---|
 | **Repo** | [github.com/luminik-io/event-outbound-skill](https://github.com/luminik-io/event-outbound-skill) |
 | **Site** | [luminik.io/tools/event-outbound](https://www.luminik.io/tools/event-outbound/) |
-| **Version** | 0.2.4 |
+| **Version** | 0.2.5 |
 | **License** | MIT |
 
 **Install:**
