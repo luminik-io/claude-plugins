@@ -13,8 +13,7 @@ from typing import Any
 
 
 EXPECTED_NAME = "luminik-plugins"
-EXPECTED_PLUGIN = "event-outbound"
-EXPECTED_REPOSITORY = "https://github.com/luminik-io/event-outbound-skill.git"
+PLUGIN_NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SHA_PATTERN = re.compile(r"^[0-9a-f]{40}$")
 
 
@@ -47,18 +46,32 @@ def require(condition: bool, message: str) -> None:
         raise VerificationError(message)
 
 
-def one_plugin(manifest: dict[str, Any], path: Path) -> dict[str, Any]:
+def plugin_map(manifest: dict[str, Any], path: Path) -> dict[str, dict[str, Any]]:
     plugins = manifest.get("plugins")
     require(isinstance(plugins, list), f"{path}: plugins must be an array")
-    matches = [
-        item
-        for item in plugins
-        if isinstance(item, dict) and item.get("name") == EXPECTED_PLUGIN
-    ]
+    result: dict[str, dict[str, Any]] = {}
+    for index, item in enumerate(plugins):
+        require(isinstance(item, dict), f"{path}: plugins[{index}] must be an object")
+        name = item.get("name")
+        require(
+            isinstance(name, str) and PLUGIN_NAME_PATTERN.fullmatch(name) is not None,
+            f"{path}: plugins[{index}].name must be kebab-case",
+        )
+        require(name not in result, f"{path}: duplicate plugin entry {name!r}")
+        result[name] = item
+    require(bool(result), f"{path}: at least one plugin is required")
+    return result
+
+
+def require_matching_plugin_sets(
+    claude_plugins: dict[str, dict[str, Any]],
+    codex_plugins: dict[str, dict[str, Any]],
+) -> None:
     require(
-        len(matches) == 1, f"{path}: expected exactly one {EXPECTED_PLUGIN!r} entry"
+        claude_plugins.keys() == codex_plugins.keys(),
+        f"marketplace plugin sets differ: Claude={sorted(claude_plugins)} "
+        f"Codex={sorted(codex_plugins)}",
     )
-    return matches[0]
 
 
 def git_output(root: Path, *args: str) -> str:
@@ -74,7 +87,6 @@ def git_output(root: Path, *args: str) -> str:
 def verify(root: Path) -> None:
     claude_path = root / ".claude-plugin" / "marketplace.json"
     codex_path = root / ".agents" / "plugins" / "marketplace.json"
-    plugin_root = root / "plugins" / EXPECTED_PLUGIN
 
     claude = load_json(claude_path)
     codex = load_json(codex_path)
@@ -91,107 +103,158 @@ def verify(root: Path) -> None:
         f"{codex_path}: interface.displayName is required",
     )
 
-    claude_entry = one_plugin(claude, claude_path)
-    codex_entry = one_plugin(codex, codex_path)
+    claude_plugins = plugin_map(claude, claude_path)
+    codex_plugins = plugin_map(codex, codex_path)
+    require_matching_plugin_sets(claude_plugins, codex_plugins)
+
+    submodule_lines = git_output(
+        root, "config", "-f", ".gitmodules", "--get-regexp", r"^submodule\..*\.path$"
+    ).splitlines()
+    submodule_paths = {
+        line.split(maxsplit=1)[1]
+        for line in submodule_lines
+        if len(line.split(maxsplit=1)) == 2
+    }
+    expected_submodule_paths = {f"plugins/{name}" for name in claude_plugins}
     require(
-        claude_entry.get("source") == f"./plugins/{EXPECTED_PLUGIN}",
-        f"{claude_path}: Claude source must remain the pinned submodule path",
+        submodule_paths == expected_submodule_paths,
+        f".gitmodules plugin paths differ: declared={sorted(expected_submodule_paths)} "
+        f"configured={sorted(submodule_paths)}",
     )
 
-    source = codex_entry.get("source")
-    require(isinstance(source, dict), f"{codex_path}: source must be an object")
-    require(
-        source.get("source") == "url", f"{codex_path}: Codex source must be URL-backed"
-    )
-    require(
-        source.get("url") == EXPECTED_REPOSITORY,
-        f"{codex_path}: unexpected Codex source URL",
-    )
-    source_ref = source.get("ref")
-    require(
-        isinstance(source_ref, str) and SHA_PATTERN.fullmatch(source_ref) is not None,
-        f"{codex_path}: Codex source ref must be an exact 40-character commit SHA",
-    )
-
-    policy = codex_entry.get("policy")
-    require(isinstance(policy, dict), f"{codex_path}: policy must be an object")
-    require(
-        policy.get("installation")
-        in {"NOT_AVAILABLE", "AVAILABLE", "INSTALLED_BY_DEFAULT"},
-        f"{codex_path}: invalid policy.installation",
-    )
-    require(
-        policy.get("authentication") in {"ON_INSTALL", "ON_USE"},
-        f"{codex_path}: invalid policy.authentication",
-    )
-    require(
-        isinstance(codex_entry.get("category"), str)
-        and bool(codex_entry["category"].strip()),
-        f"{codex_path}: category is required",
-    )
-
-    require(plugin_root.is_dir(), f"{plugin_root}: submodule is not initialized")
-    plugin_head = git_output(plugin_root, "rev-parse", "HEAD")
-    require(
-        source_ref == plugin_head,
-        f"{codex_path}: source ref {source_ref} does not match submodule HEAD {plugin_head}",
-    )
-    staged_gitlink = git_output(
-        root, "ls-files", "--stage", f"plugins/{EXPECTED_PLUGIN}"
-    ).split()
-    require(
-        len(staged_gitlink) >= 2 and staged_gitlink[0] == "160000",
-        f"{plugin_root}: expected a staged gitlink",
-    )
-    require(
-        staged_gitlink[1] == plugin_head,
-        f"{plugin_root}: gitlink {staged_gitlink[1]} does not match checked-out HEAD {plugin_head}",
-    )
-
-    claude_plugin = load_json(plugin_root / ".claude-plugin" / "plugin.json")
-    codex_plugin = load_json(plugin_root / ".codex-plugin" / "plugin.json")
-    for path, manifest in (
-        (plugin_root / ".claude-plugin" / "plugin.json", claude_plugin),
-        (plugin_root / ".codex-plugin" / "plugin.json", codex_plugin),
-    ):
+    plugin_versions: set[str] = set()
+    for plugin_name, claude_entry in claude_plugins.items():
+        codex_entry = codex_plugins[plugin_name]
+        plugin_root = root / "plugins" / plugin_name
         require(
-            manifest.get("name") == EXPECTED_PLUGIN,
-            f"{path}: name must be {EXPECTED_PLUGIN!r}",
+            claude_entry.get("source") == f"./plugins/{plugin_name}",
+            f"{claude_path}: {plugin_name} source must be its pinned submodule path",
+        )
+
+        source = codex_entry.get("source")
+        require(
+            isinstance(source, dict),
+            f"{codex_path}: {plugin_name} source must be an object",
         )
         require(
-            manifest.get("version") == claude_entry.get("version"),
-            f"{path}: version must match the Claude marketplace entry",
+            source.get("source") == "url",
+            f"{codex_path}: {plugin_name} source must be URL-backed",
         )
-    require(
-        claude_plugin.get("version") == codex_plugin.get("version"),
-        "Claude and Codex plugin versions differ",
-    )
+        expected_repository = git_output(
+            root,
+            "config",
+            "-f",
+            ".gitmodules",
+            "--get",
+            f"submodule.plugins/{plugin_name}.url",
+        )
+        require(
+            source.get("url") == expected_repository,
+            f"{codex_path}: {plugin_name} source URL differs from .gitmodules",
+        )
+        source_ref = source.get("ref")
+        require(
+            isinstance(source_ref, str)
+            and SHA_PATTERN.fullmatch(source_ref) is not None,
+            f"{codex_path}: {plugin_name} source ref must be an exact 40-character commit SHA",
+        )
+
+        policy = codex_entry.get("policy")
+        require(
+            isinstance(policy, dict),
+            f"{codex_path}: {plugin_name} policy must be an object",
+        )
+        require(
+            policy.get("installation")
+            in {"NOT_AVAILABLE", "AVAILABLE", "INSTALLED_BY_DEFAULT"},
+            f"{codex_path}: {plugin_name} has invalid policy.installation",
+        )
+        require(
+            policy.get("authentication") in {"ON_INSTALL", "ON_USE"},
+            f"{codex_path}: {plugin_name} has invalid policy.authentication",
+        )
+        require(
+            isinstance(codex_entry.get("category"), str)
+            and bool(codex_entry["category"].strip()),
+            f"{codex_path}: {plugin_name} category is required",
+        )
+
+        require(plugin_root.is_dir(), f"{plugin_root}: submodule is not initialized")
+        plugin_head = git_output(plugin_root, "rev-parse", "HEAD")
+        require(
+            source_ref == plugin_head,
+            f"{codex_path}: {plugin_name} source ref {source_ref} does not match "
+            f"submodule HEAD {plugin_head}",
+        )
+        staged_gitlink = git_output(
+            root, "ls-files", "--stage", f"plugins/{plugin_name}"
+        ).split()
+        require(
+            len(staged_gitlink) >= 2 and staged_gitlink[0] == "160000",
+            f"{plugin_root}: expected a staged gitlink",
+        )
+        require(
+            staged_gitlink[1] == plugin_head,
+            f"{plugin_root}: gitlink {staged_gitlink[1]} does not match "
+            f"checked-out HEAD {plugin_head}",
+        )
+
+        claude_plugin_path = plugin_root / ".claude-plugin" / "plugin.json"
+        codex_plugin_path = plugin_root / ".codex-plugin" / "plugin.json"
+        claude_plugin = load_json(claude_plugin_path)
+        codex_plugin = load_json(codex_plugin_path)
+        for path, manifest in (
+            (claude_plugin_path, claude_plugin),
+            (codex_plugin_path, codex_plugin),
+        ):
+            require(
+                manifest.get("name") == plugin_name,
+                f"{path}: name must be {plugin_name!r}",
+            )
+            require(
+                manifest.get("version") == claude_entry.get("version"),
+                f"{path}: version must match the Claude marketplace entry",
+            )
+        require(
+            claude_plugin.get("version") == codex_plugin.get("version"),
+            f"{plugin_name}: Claude and Codex plugin versions differ",
+        )
+        plugin_version = claude_plugin.get("version")
+        require(
+            isinstance(plugin_version, str) and bool(plugin_version),
+            f"{claude_plugin_path}: version is required",
+        )
+        plugin_versions.add(plugin_version)
+
+        skill_files = sorted((plugin_root / "skills").glob("*/SKILL.md"))
+        require(bool(skill_files), f"{plugin_root}: at least one skill is required")
+        for skill_file in skill_files:
+            require(
+                (skill_file.parent / "agents" / "openai.yaml").is_file(),
+                f"{skill_file.parent}: agents/openai.yaml is missing",
+            )
+
     metadata = claude.get("metadata")
-    require(
-        isinstance(metadata, dict)
-        and metadata.get("version") == claude_plugin.get("version"),
-        f"{claude_path}: metadata.version must match the plugin version",
-    )
-
-    skill_root = plugin_root / "skills" / EXPECTED_PLUGIN
-    require((skill_root / "SKILL.md").is_file(), f"{skill_root}: SKILL.md is missing")
-    require(
-        (skill_root / "agents" / "openai.yaml").is_file(),
-        f"{skill_root}: agents/openai.yaml is missing",
-    )
-
-    gitmodules = (root / ".gitmodules").read_text(encoding="utf-8")
-    require(
-        EXPECTED_REPOSITORY in gitmodules, ".gitmodules and Codex source URL differ"
-    )
+    require(isinstance(metadata, dict), f"{claude_path}: metadata must be an object")
+    if len(plugin_versions) == 1:
+        require(
+            metadata.get("version") == next(iter(plugin_versions)),
+            f"{claude_path}: metadata.version must match the plugin version",
+        )
 
     readme = (root / "README.md").read_text(encoding="utf-8")
-    for command in (
+    commands = [
         "claude plugin marketplace add luminik-io/claude-plugins",
-        "claude plugin install event-outbound@luminik-plugins",
         "codex plugin marketplace add luminik-io/claude-plugins",
-        "codex plugin add event-outbound@luminik-plugins",
-    ):
+    ]
+    for plugin_name in claude_plugins:
+        commands.extend(
+            (
+                f"claude plugin install {plugin_name}@{EXPECTED_NAME}",
+                f"codex plugin add {plugin_name}@{EXPECTED_NAME}",
+            )
+        )
+    for command in commands:
         require(command in readme, f"README.md: missing install command {command!r}")
 
 
