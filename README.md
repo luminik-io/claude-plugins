@@ -2,13 +2,14 @@
 
 <a href="https://www.luminik.io"><img src="https://www.luminik.io/luminik-logo.svg" alt="Luminik" height="56" /></a>
 
-# Luminik Plugins
+# Luminik Agent Plugins
 
-Open Claude plugins from [Luminik](https://www.luminik.io). <br/>
+Open Claude and Codex plugins from [Luminik](https://www.luminik.io). <br/>
 Practical skills for AEs, SDRs, and event marketers running B2B trade shows and conferences.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-f63e8c.svg)](LICENSE)
 [![Claude plugin](https://img.shields.io/badge/Claude-plugin-1e1e1e.svg)](https://claude.com/docs/plugins/overview)
+[![Codex plugin](https://img.shields.io/badge/Codex-plugin-111827.svg)](https://developers.openai.com/codex/)
 [![Plugins: 1](https://img.shields.io/badge/plugins-1-2ea043.svg)](#available-plugins)
 
 [**Install**](#install-the-marketplace) · [**Plugins**](#available-plugins) · [**Contributing**](#contributing)
@@ -21,17 +22,27 @@ Practical skills for AEs, SDRs, and event marketers running B2B trade shows and 
 
 ### Claude Code
 
-From any Claude Code session:
+From a shell:
 
 ```bash
-/plugin marketplace add luminik-io/claude-plugins
+claude plugin marketplace add luminik-io/claude-plugins
+claude plugin install event-outbound@luminik-plugins
 ```
 
-That registers this catalogue. From there, install a specific plugin with `/plugin install <name>@luminik-plugins`.
+The equivalent in-session commands are `/plugin marketplace add luminik-io/claude-plugins` and `/plugin install event-outbound@luminik-plugins`.
 
 ### Claude Cowork
 
 Once listed in Cowork's plugin directory, install `event-outbound` from **Customize** > **Browse plugins**.
+
+### Codex and ChatGPT with Codex
+
+```bash
+codex plugin marketplace add luminik-io/claude-plugins
+codex plugin add event-outbound@luminik-plugins
+```
+
+Start a new Codex task after installation, then invoke `$event-outbound`. This works in Codex CLI and Codex surfaces in the ChatGPT desktop app. A standard ChatGPT conversation that is not running Codex does not load third-party local plugin marketplaces.
 
 ## Available plugins
 
@@ -69,19 +80,32 @@ Two fully-rendered worked examples ship in the repo (Black Hat USA 2026 cybersec
 |---|---|
 | **Repo** | [github.com/luminik-io/event-outbound-skill](https://github.com/luminik-io/event-outbound-skill) |
 | **Site** | [luminik.io/tools/event-outbound](https://www.luminik.io/tools/event-outbound/) |
-| **Version** | 0.2.5 |
+| **Version** | 0.3.0 |
 | **License** | MIT |
 
 **Install:**
 
+Claude:
+
 ```bash
-/plugin marketplace add luminik-io/claude-plugins
-/plugin install event-outbound@luminik-plugins
+claude plugin marketplace add luminik-io/claude-plugins
+claude plugin install event-outbound@luminik-plugins
+```
+
+Codex:
+
+```bash
+codex plugin marketplace add luminik-io/claude-plugins
+codex plugin add event-outbound@luminik-plugins
 ```
 
 ## Contributing
 
-This marketplace is open. If you build a Claude plugin that's useful for the same audience (AEs, SDRs, event marketers, founders running their own event outbound) and want it distributed here, open a PR adding an entry to [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Plugins live as git submodules under `plugins/` so each one stays independently versioned in its own repo.
+This marketplace is open. If you build a Claude or Codex plugin that's useful for the same audience (AEs, SDRs, event marketers, founders running their own event outbound) and want it distributed here, open a PR that updates both [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) and [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json). Plugins live as pinned git submodules under `plugins/` so each one stays independently versioned in its own repo.
+
+The standalone plugin repository is the source of truth. This catalogue does not copy its skill, rules, data, or validators. A release advances the submodule gitlink and the Codex marketplace's exact commit `ref` together, then aligns both marketplace versions with the two plugin manifests.
+
+Run `python3 scripts/verify_marketplaces.py` before opening a PR. It fails when the Claude entry, Codex entry, pinned submodule, plugin manifests, version, skill metadata, or documented install commands drift apart.
 
 ## License
 
