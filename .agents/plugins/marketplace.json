@@ -1,0 +1,21 @@
+{
+  "name": "luminik-plugins",
+  "interface": {
+    "displayName": "Luminik Plugins"
+  },
+  "plugins": [
+    {
+      "name": "event-outbound",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/luminik-io/event-outbound-skill.git",
+        "ref": "60da059865b56b83f12f1ce1d4d8e75e0d2ba7e5"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
