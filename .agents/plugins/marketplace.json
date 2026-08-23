@@ -9,7 +9,7 @@
       "source": {
         "source": "url",
         "url": "https://github.com/luminik-io/event-outbound-skill.git",
-        "ref": "e19b8537f241ee9934999b01ca260426d100cf85"
+        "ref": "e5af11a86ced1fe9957d7615f969c35355087113"
       },
       "policy": {
         "installation": "AVAILABLE",
